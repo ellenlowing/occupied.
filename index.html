@@ -1,0 +1,160 @@
+<html>
+<head>
+	<title>O C C U P I E D</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet">
+	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+</head>
+<body class="index">
+	<div>
+		<img class="bg" id="bathroom" src="floor_bg9.png">
+	</div>
+	<div>
+		<a href="landing.html"><img class="left" id="switch-on" src="switch-on.png"></a>
+	</div>
+	<div>
+		<img id="face" src="giphy.gif">
+	</div>
+	<div class="popup">
+		<!-- <p class="whitespace"></p> -->
+
+		<p class="popup-msg"><br><br>Table 1. Toilet retention data collected by experimenter Ellen Lo from 10/12 to 10/20.<br><br> Colored blocks, according to this legend <img src="legend.png" id="legend">, represent amount of time experimenter sat on the toilet at a given time (y-axis) on a given day (x-axis). <br><br></p>
+		<input type="image" src="cross.png" class="close-button" onclick="showTable()">
+	</div>
+	<div class="index box"><!-- 
+		<canvas id="dataCanvas"></canvas> -->
+		<img class="data-content" src="viz2_8.png">
+	</div>
+	<div class="next-page">
+		<input type="image" src="arrow.png" id="arrow-img">
+	</div>
+	<div class="right">
+		<!--<img id="clock" src="clock-outline.png">-->
+		<canvas id="clockCanvas"></canvas>
+	</div>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			resize();
+		});
+		window.onresize = function(){
+			resize();
+		}
+		function resize(){
+			vpw = window.innerWidth;
+			vph = window.innerHeight;
+			$(".bg").height(vph);
+		}
+		$(".right").click(function(){
+			$(".data-content").css({"visibility": "visible", "opacity": "0.3"});
+			$(".next-page").css("visibility", "visible");
+			$(".popup-msg").css("visibility", "visible");
+			$(".close-button").css("visibility", "visible");
+		});
+		
+		// HTML Canvas script for CLOCK
+		var c = document.getElementById("clockCanvas");
+		var ctx = c.getContext("2d");
+		var minuteAngle = 0;
+		var hourAngle = 0;
+		var clockAngle = 0;
+		var grd_1 = 0;
+		var grd_flag = true;
+		setInterval(function(){
+			drawClock();
+			spinMinuteHand();
+			spinHourHand();
+		}, 100);
+		
+		
+		function drawClock(){
+			ctx.beginPath();
+			// ctx.rotate(clockAngle*Math.PI/180);
+			ctx.lineWidth=3;
+			ctx.strokeStyle="black";
+			ctx.arc(80, 70, 60, 0*Math.PI, 2*Math.PI);
+			// ctx.fillStyle="white";
+			var grd = ctx.createLinearGradient(grd_1,80,100,100);
+			// grd.addColorStop(0, "#0516b1");
+			// grd.addColorStop(1, "#ea2eea");
+			grd.addColorStop(0, "#4568DC");
+			grd.addColorStop(1, "#B06AB3");
+			// grd.addColorStop(0, "#0516b1");
+			// grd.addColorStop(0.16, "#d9261f");
+			// grd.addColorStop(0.32, "#ea2cea");
+			// grd.addColorStop(0.48, "#37f02f");
+			// grd.addColorStop(0.6, "#f8e339");
+			// grd.addColorStop(1, "#FFF");
+			ctx.fillStyle = grd;
+			ctx.fill();
+			ctx.stroke();
+			clockAngle++;
+			if(grd_1 == 180){
+				grd_flag = false;
+			}else if(grd_1 == 0){
+				grd_flag = true;
+			}
+			if(grd_flag){
+				grd_1++;
+			}else{
+				grd_1--;
+			}
+			
+		}
+		function spinMinuteHand(){
+			ctx.save();
+			// ctx.beginPath();
+			// if(Math.floor(minuteAngle/ 180 + 90/180) % 2 == 1){
+			// 	ctx.translate(80+5,70);
+			// }else{
+			// 	ctx.translate(80,70);
+			// }
+			ctx.translate(80,70);
+			ctx.rotate((minuteAngle)*Math.PI/180);
+			ctx.fillStyle="black";
+			ctx.fillRect(0, 0, 5, -50);
+			minuteAngle+=1;
+			ctx.restore(); 
+		}
+
+		function spinHourHand(){
+			ctx.save();
+			ctx.beginPath();
+			ctx.translate(80,70);
+			ctx.rotate(hourAngle*Math.PI/180);
+			ctx.fillStyle="black";
+			ctx.fillRect(0, 0, 6, -20);
+			hourAngle+= (1/60) ;
+			ctx.restore(); 
+		}
+
+		function showTable(){
+			$(".data-content").css("opacity", "1");
+			$(".popup-msg").css("visibility", "hidden");
+			$(".close-button").css("visibility", "hidden");
+		}
+		// HTML Canvas script for DATA BLOCK
+		// var c2 = document.getElementById("dataCanvas");
+		// var ctx2 = c2.getContext("2d");
+		// var day1 = [{start: "8", time_spent: "3"}, 
+		// 			{start: "14", time_spent: "2"}, 
+		// 			{start: "16", time_spent: "11"},
+		// 			{start: "17", time_spent: "7"},
+		// 			{start: "19", time_spent: "1"},
+		// 			{start: "20", time_spent: "2"}];
+		// ctx2.beginPath();			
+		// ctx2.fillStyle = "#00B7C3";
+		// for(var j = 0; j < day1.length; j++){
+
+		// 	var height = day1[j].time_spent;
+		// 	var yPos = day1[j].yPos;
+
+		// 	ctx2.fillRect(0, yPos, 10, height);
+		// }
+		// // ctx2.fillRect(200,100,100,20);
+
+		// ctx2.fill();
+
+	</script>
+</body>
+</html>
