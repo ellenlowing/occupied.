@@ -21,6 +21,12 @@
 		<p class="popup-msg"><br><br>Table 1. Toilet retention data collected by experimenter Ellen Lo from 10/12 to 10/20.<br><br> Colored blocks, according to this legend <img src="legend.png" id="legend">, represent amount of time experimenter sat on the toilet at a given time (y-axis) on a given day (x-axis). <br><br></p>
 		<input type="image" src="cross.png" class="close-button" onclick="showTable()">
 	</div>
+
+	<div class="description">
+		<p id="strong-description"></p>
+		
+	</div>
+	<!-- <img id="ratio" src="ratio1.png"> -->
 	<div class="index box"><!-- 
 		<canvas id="dataCanvas"></canvas> -->
 		<img class="data-content" src="viz2_8.png">
@@ -30,12 +36,26 @@
 	</div>
 	<div class="right">
 		<!--<img id="clock" src="clock-outline.png">-->
-		<canvas id="clockCanvas"></canvas>
+		<!-- <p id="reminder">Click!</p>
+		 --><canvas id="clockCanvas"></canvas>
 	</div>
 	
 	<script type="text/javascript">
+		var popupShown = false;
+		var i = 0;
+		var currentText = "";
+		var landingText = ["Toilet", "retention", "rate", "is", "calculated", "by", "the", "amount", "of", "time", "spent", "over","the", "number", "of", "times", "went", "per", "day", "."];
+
 		$(document).ready(function(){
 			resize();
+			showDescription();
+			setTimeout(function() {
+				if(!popupShown){
+					//alert("click!");
+					//$("#reminder").css({"visibility": "visible"});
+					$(".right").css({"animation": "opacity-change 0.3s"});
+				}
+			}, 3000);
 		});
 		window.onresize = function(){
 			resize();
@@ -46,11 +66,31 @@
 			$(".bg").height(vph);
 		}
 		$(".right").click(function(){
-			$(".data-content").css({"visibility": "visible", "opacity": "0.3"});
-			$(".next-page").css("visibility", "visible");
-			$(".popup-msg").css("visibility", "visible");
-			$(".close-button").css("visibility", "visible");
+			$(".description").css({"left": "81%", "top": "44%", "width": "15%"});
+			$("#strong-description").css({"font-size": "0.5em"});
+			$("#ratio").css("visibility", "visible");
+			if(!popupShown){
+				popupShown = true;
+				$(".data-content").css({"visibility": "visible", "opacity": "0.3"});
+				$(".next-page").css("visibility", "visible");
+				$(".popup-msg").css("visibility", "visible");
+				$(".close-button").css("visibility", "visible");
+				$(".description").css("opacity", "0.3");
+			}else if(popupShown) {
+				popupShown = false;
+				$(".data-content").css("opacity", "1");
+				$(".popup-msg").css("visibility", "hidden");
+				$(".close-button").css("visibility", "hidden");
+				$(".description").css("opacity", "0.8");
+			}
 		});
+
+		$(".close-button").click(function(){
+			$(".data-content").css("opacity", "1");
+			$(".popup-msg").css("visibility", "hidden");
+			$(".close-button").css("visibility", "hidden");
+			$(".description").css("opacity", "0.8");
+		})
 		
 		// HTML Canvas script for CLOCK
 		var c = document.getElementById("clockCanvas");
@@ -133,27 +173,28 @@
 			$(".popup-msg").css("visibility", "hidden");
 			$(".close-button").css("visibility", "hidden");
 		}
-		// HTML Canvas script for DATA BLOCK
-		// var c2 = document.getElementById("dataCanvas");
-		// var ctx2 = c2.getContext("2d");
-		// var day1 = [{start: "8", time_spent: "3"}, 
-		// 			{start: "14", time_spent: "2"}, 
-		// 			{start: "16", time_spent: "11"},
-		// 			{start: "17", time_spent: "7"},
-		// 			{start: "19", time_spent: "1"},
-		// 			{start: "20", time_spent: "2"}];
-		// ctx2.beginPath();			
-		// ctx2.fillStyle = "#00B7C3";
-		// for(var j = 0; j < day1.length; j++){
+		
+		function showDescription(){
+			var renderTextFunc = setInterval(function () {
+				if(i < landingText.length) {
+					$("#strong-description").text(currentText + landingText[i] + " ");
+					currentText += landingText[i] + " ";
+					i++;
+				}else{
+					clearInterval(renderTextFunc);
+				}
+			}, 150);
+		}
 
-		// 	var height = day1[j].time_spent;
-		// 	var yPos = day1[j].yPos;
+		function text_mouse_over(){
+			$(".description").css("opacity", "1");
+			console.log("mouse over");
+		}
 
-		// 	ctx2.fillRect(0, yPos, 10, height);
-		// }
-		// // ctx2.fillRect(200,100,100,20);
-
-		// ctx2.fill();
+		function text_mouse_out(){
+			$(".description").css("opacity", "0.6");
+			console.log("mouse out");
+		}
 
 	</script>
 </body>
